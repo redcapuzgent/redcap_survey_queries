@@ -1,0 +1,17 @@
+{
+  "name": "Survey Queries",
+  "namespace": "uzgent\\SurveyQueriesClass",
+  "description": "This allows for queries on surveys. This way datamanagers can communicate with surveys correspondents",
+  "authors": [
+    {
+      "name": "Lieven Vaneeckhaute",
+      "email": "lieven.vaneeckhaute@uzgent.be",
+      "institution": "University Hospital Ghent"
+    }
+  ],
+  "documentation" : "howto.html",
+  "permissions": [
+    "redcap_survey_page"
+  ]
+
+}
