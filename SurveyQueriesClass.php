@@ -18,9 +18,12 @@ class SurveyQueriesClass extends \ExternalModules\AbstractExternalModule {
             $field = $field['field_name'];
             if ($resolutionDao->fieldHasComments($project_id, $record, $field, 1))
             {
-                $value = $resolutionDao->getFieldComment($project_id, $record, $field, 1);
-                echo 'document.getElementById("label-dob").appendChild(document.createTextNode(" '.$value.'"));';
+                $value = $resolutionDao->getFieldCommentsWithStatus($project_id, $record, $field, 1, 'OPEN');
 
+                if (!empty($value))
+                {
+                    echo '$("#label-'.$field.'").after("<div class=\'alert alert-warning\'>'.$value.'</div>");';
+                }
                 //echo "<input type='text' value='".$value."'>";
             }
 

@@ -40,13 +40,54 @@ class DataResolutionDAO {
     public function getFieldComment($project_id, $record, $field, $instanceid)
     {
         $comment = "";
-        $sql = "SELECT comment as count FROM redcap_data_quality_resolutions INNER JOIN redcap_data_quality_status ON redcap_data_quality_status.status_id = redcap_data_quality_resolutions.status_id  WHERE project_id=? AND field_name=? AND instance = ? AND record = ?";
+        $sql = "SELECT comment FROM redcap_data_quality_resolutions INNER JOIN redcap_data_quality_status ON redcap_data_quality_status.status_id = redcap_data_quality_resolutions.status_id  WHERE project_id=? AND field_name=? AND instance = ? AND record = ?";
         $prepared = mysqli_prepare($this->conn, $sql);
         mysqli_stmt_bind_param($prepared, "dsds", $project_id, $field, $instanceid, $record);
         mysqli_stmt_execute($prepared);
         mysqli_stmt_bind_result($prepared, $comment );
         mysqli_stmt_fetch($prepared);
         return $comment;
+    }
+
+    public function getFieldComments($project_id, $record, $field, $instanceid)
+    {
+        $comment = "";
+        $sql = "SELECT comment FROM redcap_data_quality_resolutions INNER JOIN redcap_data_quality_status ON redcap_data_quality_status.status_id = redcap_data_quality_resolutions.status_id  WHERE project_id=? AND field_name=? AND instance = ? AND record = ?";
+        $prepared = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($prepared, "dsds", $project_id, $field, $instanceid, $record);
+        mysqli_stmt_execute($prepared);
+        mysqli_stmt_bind_result($prepared, $comment );
+        $comments = "";
+        while (mysqli_stmt_fetch($prepared))
+        {
+            $comments .= $comment . "<BR/>";
+        }
+        return $comments;
+    }
+
+    /**
+     * @param $project_id
+     * @param $record
+     * @param $field
+     * @param $instanceid
+     * @param $status string Either OPEN or CLOSED.
+     * @return string
+     */
+    public function getFieldCommentsWithStatus($project_id, $record, $field, $instanceid, $status)
+    {
+        $comment = "";
+        $sql = "SELECT comment FROM redcap_data_quality_resolutions INNER JOIN redcap_data_quality_status ON redcap_data_quality_status.status_id = redcap_data_quality_resolutions.status_id  WHERE project_id=? AND field_name=? AND instance = ? AND record = ? AND query_status = ?";
+        $prepared = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($prepared, "dsdss", $project_id, $field, $instanceid, $record, $status);
+        mysqli_stmt_execute($prepared);
+
+        mysqli_stmt_bind_result($prepared, $comment );
+        $comments = "";
+        while (mysqli_stmt_fetch($prepared))
+        {
+            $comments .= $comment . "<BR/>";
+        }
+        return $comments;
     }
     
     /**
